@@ -40,7 +40,7 @@ class PasswordHasher {
    */
   PasswordHasher({SaltGenerator saltGenerator, Hash hash, int iterations: 1000, int keyLength: 32}) {
     this.saltGenerator = saltGenerator == null ? new RandomSaltGenerator() : saltGenerator;
-    this.hash = hash == null ? new SHA256() : hash;
+    this.hash = hash == null ? sha256 : hash;
     this._iterations = iterations;
     this._keyLength = keyLength;
   }
