@@ -1,6 +1,7 @@
 library password_hasher_impl;
 
 import 'dart:math';
+import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:pbkdf2/pbkdf2.dart';
 
@@ -84,13 +85,13 @@ class SecurityHelper {
   static List<int> extractSaltFromHash(String hashedPassword) {
     var saltLength = int.parse(hashedPassword.substring(0, 3));
     var saltB64 = hashedPassword.substring(3, 3 + saltLength);
-    return CryptoUtils.base64StringToBytes(saltB64);
+    return BASE64.decode(saltB64);
   }
 
   static List<int> extractPasswordHashFromHash(String hashedPassword) {
     var saltLength = int.parse(hashedPassword.substring(0, 3));
     var passwordHashB64 = hashedPassword.substring(3 + saltLength);
-    return CryptoUtils.base64StringToBytes(passwordHashB64);
+    return BASE64.decode(passwordHashB64);
   }
 
   static List<int> hashPasswordAndSalt(List<int> salt, String password, Hash hash,
@@ -100,8 +101,8 @@ class SecurityHelper {
   }
 
   static String joinSaltAndHashedPassword(List<int> salt, List<int> password) {
-    var saltB64 = CryptoUtils.bytesToBase64(salt);
-    var passwordB64 = CryptoUtils.bytesToBase64(password);
+    var saltB64 = BASE64.encode(salt);
+    var passwordB64 = BASE64.encode(password);
     var saltLength = saltB64.length;
     var joined = "$saltLength";
     while (joined.length < 3) {
